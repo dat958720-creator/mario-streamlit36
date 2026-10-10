@@ -1,0 +1,62 @@
+import streamlit as st
+
+st.title("🍄 Tựa Game Lấy Cảm Hứng Từ Mario")
+st.write("Chơi game trực tiếp trên trình duyệt web của bạn!")
+
+# Đoạn mã HTML/JS giả lập game nền tảng (Platformer) đơn giản
+mario_game_html = """
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { background: #5c94fc; text-align: center; font-family: sans-serif; color: white; }
+        canvas { background: #5c94fc; border: 2px solid white; }
+    </style>
+</head>
+<body>
+    <h3>Dùng phím Mũi tên để di chuyển, Phím Cách (Space) để nhảy</h3>
+    <canvas id="gameCanvas" width="600" height="300"></canvas>
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+        
+        let x = 50, y = 200, vy = 0, gravity = 0.6;
+        let isJumping = false;
+
+        document.addEventListener("keydown", (e) => {
+            if (e.code === "ArrowRight") x += 10;
+            if (e.code === "ArrowLeft") x -= 10;
+            if (e.code === "Space" && !isJumping) {
+                vy = -10;
+                isJumping = true;
+            }
+        });
+
+        function update() {
+            vy += gravity;
+            y += vy;
+            if (y > 200) { y = 200; vy = 0; isJumping = false; }
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // Vẽ Mario (ô vuông đỏ tạm thời)
+            ctx.fillStyle = "red";
+            ctx.fillRect(x, y, 30, 40);
+            // Vẽ mặt đất
+            ctx.fillStyle = "green";
+            ctx.fillRect(0, 240, canvas.width, 60);
+        }
+
+        function loop() {
+            update();
+            draw();
+            requestAnimationFrame(loop);
+        }
+        loop();
+    </script>
+</body>
+</html>
+"""
+
+st.components.v1.html(mario_game_html, height=400)
